@@ -61,7 +61,6 @@ RUN apt-get update -qq && \
 
 RUN gem install foreman
 
-
 # Run and own the application files as a non-root user for security
 RUN useradd rails
 USER rails:rails
@@ -75,4 +74,4 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD ["bin/dev"]
+CMD ["./bin/rails", "server"]
