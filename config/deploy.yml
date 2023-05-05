@@ -1,0 +1,45 @@
+# Name of your application. Used to uniquely configure containers.
+service: pk
+image: evgev/pk
+
+servers:
+  - 185.22.61.211
+registry:
+  username: evgev
+  password:
+    - MRSK_REGISTRY_PASSWORD
+env:
+  clear:
+    DATABASE_URL: postgres://postgres@185.22.61.211/pkbase_production
+    RAILS_LOG_TO_STDOUT: 1
+    RAILS_SERVE_STATIC_FILES: 1
+    REDIS_URL: redis://185.22.61.211:6379/0
+
+  secret:
+    - RAILS_MASTER_KEY
+
+builder:
+  multiarch: false
+  args:
+    RUBY_VERSION: 3.1.0
+
+accessories:
+  redis:
+    image: redis:6.2.12-alpine
+    hosts:
+      - 185.22.61.211
+    volumes:
+      - redis:/data
+    port: 6379
+
+
+  postgres:
+    image: postgres:14.6-alpine
+    hosts:
+      - 185.22.61.211
+    port: 5432
+    volumes:
+      - postgres:/var/lib/postgresql/data:cached
+    env:
+      clear:
+        POSTGRES_HOST_AUTH_METHOD: trust
